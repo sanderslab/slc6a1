@@ -540,8 +540,8 @@ def make_figure_5 (df):
 def _get_seaborn_axes_style(style="ticks"):
 	# Use the properties from `sns.set_style("ticks")`
 	params = sns.axes_style(style)
-	# Remove invalid matplotlib parameter
-	params.pop("font.sans-serif")
+	# Remove invalid matplotlib parameter (if present)
+	params.pop("font.sans-serif", None)
 	return params
 
 
