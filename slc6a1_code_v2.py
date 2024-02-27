@@ -39,7 +39,7 @@ def is_float(element) -> bool:
 
 def make_figure_1 (df, uptake_values):
 	
-	df_up = df[(df[uptake_values] != '.')]
+	df_up = df[(df[uptake_values] != '.')].copy()
 	df_sort = df_up.sort_values(uptake_values, axis=0, ascending=True, inplace=False)
 
 	fig = plt.figure(figsize=(6,35))
@@ -63,7 +63,7 @@ def make_figure_1 (df, uptake_values):
 
 def make_figure_2a (df, uptake_values):
 
-	df_fv = df[(df[uptake_categories] != '.') & (df['Variant_impact_cat'] != '.')]
+	df_fv = df[(df[uptake_categories] != '.') & (df['Variant_impact_cat'] != '.')].copy()
 	df_fv.loc[:, "Variant_impact_cat"]=df_fv["Variant_impact_cat"].apply(str)
 
 	metric_name = [uptake_values]
@@ -112,7 +112,7 @@ def make_figure_2a (df, uptake_values):
 
 def make_figure_2b (df, uptake_values):
 	
-	df_fg = df[(df[uptake_values] != '.') & (df['gnomADv2_Count_Cat_non_neuro'] != '.')]
+	df_fg = df[(df[uptake_values] != '.') & (df['gnomADv2_Count_Cat_non_neuro'] != '.')].copy()
 	df_fg.loc[:, "gnomADv2_Count_Cat_non_neuro"]=df_fg["gnomADv2_Count_Cat_non_neuro"].apply(str)
 
 	metric_name = [uptake_values]
@@ -161,7 +161,7 @@ def make_figure_2b (df, uptake_values):
 
 def make_figure_2c (df, uptake_values):
 
-	df_fc = df[(df[uptake_categories] != '.') & (df['ClinVar_call_simp'] != '.')]
+	df_fc = df[(df[uptake_categories] != '.') & (df['ClinVar_call_simp'] != '.')].copy()
 
 	metric_name = [uptake_values]
 	class_name = ["Pathogenic", "Likely pathogenic", 
@@ -213,7 +213,7 @@ def make_figure_2c (df, uptake_values):
 def make_figure_2d (df, uptake_categories):
 
 	# Numbers for sankey plot
-	df_fc = df[(df[uptake_categories] != '.')]
+	df_fc = df[(df[uptake_categories] != '.')].copy()
 
 	# Level one
 	all_var = df_fc.shape[0]
@@ -287,14 +287,14 @@ def make_figure_2d (df, uptake_categories):
 def make_figure_2e (df, uptake_values):
 	
 	# Make dataframe for de novo by phenotype
-	df_fd = df[(df[uptake_values] != '.') & (df['Inheritance_simp'] == 'De_novo')]
+	df_fd = df[(df[uptake_values] != '.') & (df['Inheritance_simp'] == 'De_novo')].copy()
 
-	df_fd_seizure = df_fd[(df_fd['Seizures'] == 'Yes') ]
-	df_fd_autism = df_fd[(df_fd['Autism'] == 'Yes') ]
-	df_fd_delay = df_fd[(df_fd['DD_or_ID'] == 'Yes') ]
+	df_fd_seizure = df_fd[(df_fd['Seizures'] == 'Yes') ].copy()
+	df_fd_autism = df_fd[(df_fd['Autism'] == 'Yes') ].copy()
+	df_fd_delay = df_fd[(df_fd['DD_or_ID'] == 'Yes') ].copy()
 	df_fd_sch = df_fd[(df_fd['Schizophrenia'] == 'Yes') & 
 	                   (df_fd['ProteinFull'] != 'p.Ala305Thr') & 
-	                   (df_fd['ProteinFull'] != 'p.Ala334Thr') ]
+	                   (df_fd['ProteinFull'] != 'p.Ala334Thr') ].copy()
 
 	df_fd_seizure.insert(0, 'Pheno', 'Seizures')
 	df_fd_autism.insert(0, 'Pheno', 'ASD')
@@ -349,8 +349,8 @@ def make_figure_2e (df, uptake_values):
 	# Test significance of schiozphrenia vs other
 	sch_rees_uptake = df_pd[uptake_values][(df_pd['Pheno'] == 'Schizophrenia') & 
 	                                       (df_pd['ProteinFull'] != 'p.Ala305Thr') & 
-	                                       (df_pd['ProteinFull'] != 'p.Ala334Thr')]
-	other_uptake = df_pd[uptake_values][(df_pd['Pheno'] != 'Schizophrenia')]
+	                                       (df_pd['ProteinFull'] != 'p.Ala334Thr')].copy()
+	other_uptake = df_pd[uptake_values][(df_pd['Pheno'] != 'Schizophrenia')].copy()
 	stat, pval = mannwhitneyu(pd.to_numeric(sch_rees_uptake), pd.to_numeric(other_uptake), alternative='two-sided')
 	print(f'P = {pval}')
 
@@ -408,9 +408,9 @@ def make_figure_2f (df, uptake_values):
 
 def make_figure_3a (df, uptake_values, surface_expression):
 	
-	df_surf = df[(df[uptake_values] != '.') & (df[surface_expression] != '.')]
+	df_surf = df[(df[uptake_values] != '.') & (df[surface_expression] != '.')].copy()
 	df_surf = df_surf.reset_index(level=None, drop=True, inplace=False)
-	df_a = df_surf[[uptake_values, surface_expression]]
+	df_a = df_surf[[uptake_values, surface_expression]].copy()
 	empty_vector = 0.468765210820772
 
 	# K means
@@ -511,7 +511,7 @@ def make_figure_5 (df):
 	plt.rcParams['axes.unicode_minus'] = False  # Make sure the minus sign prints out correctly
 	plt.rcParams.update(_get_seaborn_axes_style())
 
-	df_num = df[(df["Mutability"] != '.') & (df["Pred_uptake"] != '.')]
+	df_num = df[(df["Mutability"] != '.') & (df["Pred_uptake"] != '.')].copy()
 	df_num = df_num.astype({'Mutability':'float', 'Pred_uptake':'float'})
 	df_num_zero = df_num[(df_num["Unique_count"] == 0)]
 	df_num_one = df_num[(df_num["Unique_count"] == 1)]
